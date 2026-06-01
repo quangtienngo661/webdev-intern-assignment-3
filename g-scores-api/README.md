@@ -68,7 +68,50 @@ On startup, the API container runs:
 npm run db:deploy && npm run db:seed && npm run start:prod
 ```
 
-The seed script skips importing if the database already contains score rows.
+Docker Compose sets `RUN_SEED_ON_START=true`, so the API imports the CSV on
+startup. The seed script skips importing if the database already contains score
+rows.
+
+## Deploy API on Render With Docker
+
+Render does not run `docker-compose.yml`, so the hostname `postgres` from local
+Docker Compose is not available on Render.
+
+Create a Render PostgreSQL database first, then set this env variable on the
+Render API web service:
+
+```env
+DATABASE_URL=<Render PostgreSQL Internal Database URL>
+```
+
+Do not use this local Docker Compose URL on Render:
+
+```env
+DATABASE_URL=postgresql://postgres:postgres@postgres:5432/g_scores?schema=public
+```
+
+Recommended Render API env:
+
+```env
+DATABASE_URL=<Render PostgreSQL Internal Database URL>
+CORS_ORIGIN=<your frontend URL>
+RUN_SEED_ON_START=false
+```
+
+The Dockerfile only runs `db:seed` when `RUN_SEED_ON_START=true`. This keeps the
+Render deploy from failing because Render does not mount the local
+`./dataset` directory into the container.
+
+To import data into Render PostgreSQL, run the seed once from your local
+machine using the Render PostgreSQL External Database URL:
+
+```powershell
+cd g-scores-api
+$env:DATABASE_URL="<Render PostgreSQL External Database URL>"
+$env:SEED_FILE="../dataset/diem_thi_thpt_2024.csv"
+npm run db:deploy
+npm run db:seed
+```
 
 ## Run Locally
 

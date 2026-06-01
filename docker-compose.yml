@@ -9,6 +9,7 @@ services:
       PORT: 5000
       SEED_FILE: ${SEED_FILE:-/dataset/diem_thi_thpt_2024.csv}
       SEED_BATCH_SIZE: ${SEED_BATCH_SIZE:-2000}
+      RUN_SEED_ON_START: ${RUN_SEED_ON_START:-true}
     volumes:
       - ./dataset:/dataset:ro
     depends_on:
