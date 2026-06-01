@@ -1,0 +1,26 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Score {
+  id         Int     @id @default(autoincrement())
+  sbd        String  @unique @db.VarChar(8)
+  toan       Float?
+  nguVan     Float?  @map("ngu_van")
+  ngoaiNgu   Float?  @map("ngoai_ngu")
+  vatLi      Float?  @map("vat_li")
+  hoaHoc     Float?  @map("hoa_hoc")
+  sinhHoc    Float?  @map("sinh_hoc")
+  lichSu     Float?  @map("lich_su")
+  diaLi      Float?  @map("dia_li")
+  gdcd       Float?
+  maNgoaiNgu String? @map("ma_ngoai_ngu") @db.VarChar(8)
+
+  @@map("scores")
+}
