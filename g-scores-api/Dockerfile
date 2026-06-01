@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN DATABASE_URL=postgresql://postgres:postgres@localhost:5432/g_scores?schema=public npm run prisma:generate
+RUN npx prisma generate --config=prisma.config.ts
 RUN npm run build
 
 EXPOSE 5000
